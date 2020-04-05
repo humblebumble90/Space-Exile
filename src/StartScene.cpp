@@ -11,7 +11,7 @@
 
 StartScene::StartScene()
 {
-	StartScene::start();
+	start();
 }
 
 StartScene::~StartScene()

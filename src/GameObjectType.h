@@ -12,6 +12,7 @@ enum GameObjectType {
 	NONE = -1,
 	START_BUTTON,
 	EXIT_BUTTON,
+	PLAY_SCENE_BG,
 	START_SCENE_BG,
 	NUM_OF_TYPES
 };

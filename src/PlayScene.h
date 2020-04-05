@@ -9,6 +9,7 @@
 #ifndef __PLAY_SCENE__
 #define __PLAY_SCENE__
 #include "Scene.h"
+#include "Map.h"
 
 
 class PlayScene:public Scene
@@ -22,7 +23,9 @@ public:
 	void clean() override;
 	void handleEvents() override;
 	void start() override;
-
+private:
+	Map* m_pMap1;
+	Map* m_pMap2;
 };
 #endif /*Defined __PLAY_SCENE__*/
 

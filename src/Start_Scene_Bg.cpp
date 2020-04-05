@@ -9,7 +9,8 @@
 #include "Start_Scene_Bg.h"
 #include "game.h"
 
-Start_Scene_Bg::Start_Scene_Bg(std::string imagePath, std::string name, GameObjectType type, glm::vec2 position, bool isCentered)
+Start_Scene_Bg::Start_Scene_Bg(std::string imagePath, std::string name,
+	GameObjectType type, glm::vec2 position, bool isCentered)
 : m_name(name), m_isCentered(isCentered), m_alpha(255)
 {
 	TheTextureManager::Instance()->load(imagePath,
