@@ -3,7 +3,7 @@
 #include "game.h"
 
 Enemy1::Enemy1():m_maxSpeed(2.5f),m_name("enemy1"),m_alpha(255),
-m_verticalSwitchCooldown(30.0f),m_time(-30.0f)
+m_verticalSwitchCooldown(30.0f),m_time(-30.0f), m_activated(false)
 {
 		std::string imagePath = "../Assets/textures/enemy1.png";
 		TheTextureManager::Instance()->load(imagePath,
@@ -46,6 +46,16 @@ void Enemy1::setSpawningPosition(glm::vec2 pos)
 	std::cout << "Start y pos: "<<startPosition.y << std::endl;
 }
 
+void Enemy1::activate(bool newState)
+{
+	m_activated = newState;
+}
+
+bool Enemy1::isActivated()
+{
+	return m_activated;
+}
+
 void Enemy1::move()
 {
 	m_time++;
@@ -79,14 +89,14 @@ void Enemy1::checkBound()
 {
 	if (getPosition().x <= Config::SCREEN_WIDTH * 0.03f - getWidth())
 	{
-		setSpawningPosition(startPosition);
+		m_activated = false;
 	}
 	if (getPosition().y <= Config::SCREEN_HEIGHT * 0.03f - getHeight())
 	{
-		setSpawningPosition(startPosition);
+		m_activated = false;
 	}
 	if (getPosition().y >= Config::SCREEN_HEIGHT * 0.97f + getHeight())
 	{
-		setSpawningPosition(startPosition);
+		m_activated = false;
 	}
 }

@@ -22,6 +22,7 @@ public:
 	~PlayScene();
 
 	void draw() override;
+	void spawnEnemy1();
 	void update() override;
 	void clean() override;
 	void handleEvents() override;
@@ -31,7 +32,7 @@ private:
 	Map* m_pMap2;
 	Player* m_pPlayer;
 
-	int time;
+	int enemy1SpawningCooldown;
 
 };
 #endif /*Defined __PLAY_SCENE__*/

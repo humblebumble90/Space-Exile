@@ -16,6 +16,8 @@ public:
 
 	void setSpawningPosition(glm::vec2 pos);
 
+	void activate(bool newState);
+	bool isActivated();
 private:
 	float m_maxSpeed;
 	glm::vec2 startPosition;
@@ -24,6 +26,7 @@ private:
 	Uint8 m_alpha;
 	float m_verticalSwitchCooldown;
 	float m_time;
+	bool m_activated;
 
 	void move();
 	void fire();

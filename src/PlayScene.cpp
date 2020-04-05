@@ -2,6 +2,7 @@
 #include <SDL.h>
 #include "game.h"
 #include "BulletManager.h"
+#include "Enemy1Manager.h"
 
 PlayScene::PlayScene()
 {
@@ -18,15 +19,43 @@ void PlayScene::draw()
 	m_pMap2->draw();
 	m_pPlayer->draw();
 	BulletManager::Instance()->draw();
+	Enemy1Manager::Instance()->draw();
+}
+
+void PlayScene::spawnEnemy1()
+{
+	auto enemy1_1 = Enemy1Manager::Instance()->getEnemy1();
+	int randNum_1 = rand() % 201 + 20;
+	enemy1_1->setSpawningPosition
+		(glm::vec2(Config::SCREEN_WIDTH*0.9f, randNum_1));
+	enemy1_1->activate(true);
+
+	auto enemy1_2 = Enemy1Manager::Instance()->getEnemy1();
+	int randNum_2 = rand() % 221 + 200;
+	enemy1_2->setSpawningPosition
+	(glm::vec2(Config::SCREEN_WIDTH * 0.9f, randNum_2));
+	enemy1_2->activate(true);
+
+	auto enemy1_3 = Enemy1Manager::Instance()->getEnemy1();
+	int randNum_3 = rand() % 241 + 400;
+	enemy1_3->setSpawningPosition
+	(glm::vec2(Config::SCREEN_WIDTH * 0.9f, randNum_3));
+	enemy1_3->activate(true);
 }
 
 void PlayScene::update()
 {
-	time++;
+	enemy1SpawningCooldown++;
 	m_pMap1->update();
 	m_pMap2->update();
 	m_pPlayer->update();
 	BulletManager::Instance()->update();
+	Enemy1Manager::Instance()->update();
+	if(enemy1SpawningCooldown > 300)
+	{
+		spawnEnemy1();
+		enemy1SpawningCooldown = 0;
+	}
 }
 
 void PlayScene::clean()
@@ -103,7 +132,7 @@ void PlayScene::handleEvents()
 
 void PlayScene::start()
 {
-	time = 0;
+	enemy1SpawningCooldown = 0;
 	m_pMap1 = new Map();
 	m_pMap1->setPosition(glm::vec2(-1280.0f,0.0f));
 	m_pMap1->setParent(this);
