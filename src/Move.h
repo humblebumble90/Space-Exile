@@ -1,15 +1,8 @@
 #pragma once
-#ifndef __MOVE__
-#define __MOVE__
-
-enum Move
-{
-	RIGHT,
+enum Move {
 	LEFT,
+	RIGHT,
 	UP,
 	DOWN,
 	NUM_OF_MOVES
-	
 };
-
-#endif /* defined (__MOVE__)*/

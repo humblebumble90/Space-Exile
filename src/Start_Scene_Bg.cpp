@@ -21,7 +21,7 @@ Start_Scene_Bg::Start_Scene_Bg(std::string imagePath, std::string name,
 	setHeight(size.y);
 	setPosition(position);
 	setType(type);
-	std::cout << "background instantiated!\n";
+	std::cout << "Start_Scene_Bg instantiated!\n";
 }
 
 Start_Scene_Bg::~Start_Scene_Bg()

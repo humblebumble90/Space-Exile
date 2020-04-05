@@ -1,3 +1,10 @@
+/*
+ * Author: 'Phillip' Hyungseok lee.
+ * Reference: Myself
+ * StudentNumber: 301011097
+ * Written date : 04-05-2020
+ * Description: Implement playscene background img loading and scrolling
+ */
 #pragma once
 #include "DisplayObject.h"
 #include <SDL_hints.h>

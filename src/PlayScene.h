@@ -10,6 +10,9 @@
 #define __PLAY_SCENE__
 #include "Scene.h"
 #include "Map.h"
+#include "Player.h"
+#include "Enemy1.h"
+#include <list>
 
 
 class PlayScene:public Scene
@@ -26,6 +29,10 @@ public:
 private:
 	Map* m_pMap1;
 	Map* m_pMap2;
+	Player* m_pPlayer;
+
+	int time;
+
 };
 #endif /*Defined __PLAY_SCENE__*/
 
