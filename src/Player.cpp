@@ -146,5 +146,5 @@ void Player::beInvincible()
 	std::cout << "Invincible \n";
 	m_alpha = 122;
 	inv = true;
-	m_invCoolTime = 30.0f;
+	m_invCoolTime = 15.0f;
 }

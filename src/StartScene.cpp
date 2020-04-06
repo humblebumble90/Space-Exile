@@ -40,9 +40,9 @@ void StartScene::update()
 
 void StartScene::clean()
 {
-	delete m_pStart_Scene_Bg;
-	delete m_pStartLabel;
-	delete m_pExitButton;
+	//delete m_pStart_Scene_Bg;
+	//delete m_pStartLabel;
+	//delete m_pExitButton;
 	removeAllChildren();
 }
 
