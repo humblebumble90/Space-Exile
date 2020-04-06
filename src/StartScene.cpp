@@ -15,8 +15,7 @@ StartScene::StartScene()
 }
 
 StartScene::~StartScene()
-{
-}
+= default;
 
 void StartScene::draw()
 {
@@ -31,18 +30,30 @@ void StartScene::draw()
 void StartScene::update()
 {
 	m_pStartButton->setMousePosition(m_mousePosition);
-	m_pStartButton->ButtonClick();
-	m_pExitButton->setMousePosition(m_mousePosition);
-	m_pExitButton->ButtonClick();
+	if(m_pStartButton->ButtonClick())
+	{
+		TheGame::Instance()->changeSceneState(PLAY_SCENE);
+	}
 	m_pInstruction_btn->setMousePosition(m_mousePosition);
-	m_pInstruction_btn->ButtonClick();
+	if(m_pInstruction_btn->ButtonClick())
+	{
+		Game::Instance()->changeSceneState(INSTRUCTION_SCENE);
+	}
+	m_pExitButton->setMousePosition(m_mousePosition);
+	if(m_pExitButton->ButtonClick())
+	{
+		Game::Instance()->quit();
+	}
 }
 
 void StartScene::clean()
 {
-	//delete m_pStart_Scene_Bg;
-	//delete m_pStartLabel;
+	delete m_pStart_Scene_Bg;
+	delete m_pStartLabel;
+	//delete m_pStartButton;
+	//delete m_pInstruction_btn;
 	//delete m_pExitButton;
+	TheSoundManager::Instance()->clear();
 	removeAllChildren();
 }
 

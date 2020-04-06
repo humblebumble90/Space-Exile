@@ -19,7 +19,6 @@ bool Instruction_btn::ButtonClick()
 	{
 		if (!m_isClicked)
 		{
-			Game::Instance()->changeSceneState(INSTRUCTION_SCENE);
 			m_isClicked = true;
 		}
 		return true;

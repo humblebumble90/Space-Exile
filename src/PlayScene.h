@@ -26,6 +26,7 @@ public:
 	void update() override;
 	void clean() override;
 	void handleEvents() override;
+	void initializePooling();
 	void start() override;
 private:
 	Map* m_pMap1;
@@ -34,10 +35,12 @@ private:
 	Label* m_pScoreLabel;
 	Label* m_pHighscoreLabel;
 	Player* m_pPlayer;
-	int enemy1SpawningCooldown;
+	int enemySpawningCooldown;
+	int rndint;
 	
 	void spawnEnemy();
 	void checkCollision();
+	void displayExplosion(glm::vec2 pos);
 
 };
 #endif /*Defined __PLAY_SCENE__*/

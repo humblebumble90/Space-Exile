@@ -1,18 +1,25 @@
+/*
+ * Author: 'Phillip' Hyungseok lee.
+ * Reference: Provided several templates from the professor Tom Tsiliopoulos's 2020 Winter COMP397 course.
+ * StudentNumber: 301011097
+ * Written date : 04-06-2020
+ * Description: Scoreboard to display score, lives, and highscore
+ */
 #pragma once
 #ifndef __SCOREBOARD__
 #define __SCOREBOARD__
 #include <string>
 #include <vector>
 
-class Scoreboard
+class ScoreBoard
 {
 	//this is for carrying your lives over to the other scenes
 public:
-	static Scoreboard* Instance()
+	static ScoreBoard* Instance()
 	{
 		if (instance == nullptr)
 		{
-			instance = new Scoreboard();
+			instance = new ScoreBoard();
 			return instance;
 		}
 		return instance;
@@ -26,13 +33,13 @@ public:
 	void resetValues();
 
 private:
-	Scoreboard();
-	~Scoreboard();
+	ScoreBoard();
+	~ScoreBoard();
 
 	int hp;
 	int score;
 	int highScore;
-	static Scoreboard* instance;
+	static ScoreBoard* instance;
 };
 
 #endif 

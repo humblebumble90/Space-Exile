@@ -4,6 +4,8 @@
 #include "BulletManager.h"
 #include "EnemyManager.h"
 #include "ScoreBoard.h"
+#include "ExplosionManager.h"
+#include "ItemManager.h"
 
 PlayScene::PlayScene()
 {
@@ -24,6 +26,8 @@ void PlayScene::draw()
 	m_pPlayer->draw();
 	BulletManager::Instance()->draw();
 	EnemyManager::Instance()->draw();
+	ExplosionManager::Instance()->draw();
+	ItemManager::Instance()->draw();
 }
 
 void PlayScene::spawnEnemy()
@@ -46,11 +50,17 @@ void PlayScene::spawnEnemy()
 	(glm::vec2(Config::SCREEN_WIDTH * 0.8f, randNum_3));
 	enemy1_3->activate(true);
 
-	auto enemy2 = EnemyManager::Instance()->getEnemy2();
-	int randNum_4 = rand() % 560 + 20;
-	enemy2->setPosition
+	auto enemy2_1 = EnemyManager::Instance()->getEnemy2();
+	int randNum_4 = rand() % 340 + 20;
+	enemy2_1->setPosition
 	(glm::vec2(Config::SCREEN_WIDTH * 0.8f, randNum_4));
-	enemy2->activate(true);
+	enemy2_1->activate(true);
+
+	auto enemy2_2 = EnemyManager::Instance()->getEnemy2();
+	int randNum_5 = rand() % 181 + 400;
+	enemy2_2->setPosition
+	(glm::vec2(Config::SCREEN_WIDTH * 0.8f, randNum_5));
+	enemy2_2->activate(true);
 }
 
 void PlayScene::checkCollision()
@@ -64,9 +74,13 @@ void PlayScene::checkCollision()
 			{
 				std::cout << "Collision with enemy1\n";
 				m_pPlayer->hit();
+				if(!m_pPlayer->isProtected())
+				{
+					displayExplosion(m_pPlayer->getPosition());
+				}
 				m_pHpLabel
 					->setText("Hp: " 
-						+ std::to_string(Scoreboard::Instance()->getHP() * 20)
+						+ std::to_string(ScoreBoard::Instance()->getHP() * 20)
 					+ "%");
 				if(m_pPlayer->getPlayerHP() <= 0)
 				{
@@ -82,13 +96,23 @@ void PlayScene::checkCollision()
 					enemy1->activate(false);
 					SoundManager::Instance()->playSound("enemyHit", 0);
 					laser->activate(false);
-					Scoreboard::Instance()->setScore(100);
+					displayExplosion(enemy1->getPosition());
+					
+					rndint = rand() % 100;
+					if(rndint < 5)
+					{
+						auto shield = ItemManager::Instance()->getShield();
+						shield->setPosition(enemy1->getPosition());
+						shield->activate(true);
+					}
+					
+					ScoreBoard::Instance()->setScore(100);
 					m_pScoreLabel->setText("Score : "
-						+ std::to_string(Scoreboard::Instance()->getScore()));
+						+ std::to_string(ScoreBoard::Instance()->getScore()));
 					m_pHighscoreLabel
-						->setText("HIghscore: " + std::to_string(Scoreboard::Instance()->getHighScore()));
+						->setText("HIghscore: " + std::to_string(ScoreBoard::Instance()->getHighScore()));
 				}
-			}
+			}		
 		}
 	}
 
@@ -101,9 +125,13 @@ void PlayScene::checkCollision()
 			{
 				std::cout << "Collision with enemy2\n";
 				m_pPlayer->hit();
+				if (!m_pPlayer->isProtected())
+				{
+					displayExplosion(m_pPlayer->getPosition());
+				}
 				m_pHpLabel
 					->setText("Hp: "
-						+ std::to_string(Scoreboard::Instance()->getHP() * 20)
+						+ std::to_string(ScoreBoard::Instance()->getHP() * 20)
 						+ "%");
 				if (m_pPlayer->getPlayerHP() <= 0)
 				{
@@ -119,11 +147,25 @@ void PlayScene::checkCollision()
 					enemy2 -> activate(false);
 					SoundManager::Instance()->playSound("enemyHit", 0);
 					laser->activate(false);
-					Scoreboard::Instance()->setScore(200);
+					displayExplosion(enemy2->getPosition());
+					rndint = rand() % 100;
+					if (rndint < 20)
+					{
+						auto shield = ItemManager::Instance()->getShield();
+						shield->setPosition(enemy2->getPosition());
+						shield->activate(true);
+					}
+					if (rndint > 19 && rndint < 25)
+					{
+						auto powerUp = ItemManager::Instance()->getPowerUp();
+						powerUp->setPosition(enemy2->getPosition());
+						powerUp->activate(true);
+					}
+					ScoreBoard::Instance()->setScore(200);
 					m_pScoreLabel->setText("Score : "
-						+ std::to_string(Scoreboard::Instance()->getScore()));
+						+ std::to_string(ScoreBoard::Instance()->getScore()));
 					m_pHighscoreLabel
-						->setText("HIghscore: " + std::to_string(Scoreboard::Instance()->getHighScore()));
+						->setText("HIghscore: " + std::to_string(ScoreBoard::Instance()->getHighScore()));
 				}
 			}
 			for(auto enemyLaser : BulletManager::Instance()->getEnemyBulletPool())
@@ -136,9 +178,10 @@ void PlayScene::checkCollision()
 						std::cout << "Player is shot by enemy laser!\n";
 						enemyLaser->activate(false);
 						m_pPlayer->hit();
+						displayExplosion(m_pPlayer->getPosition());
 						m_pHpLabel
 							->setText("Hp: "
-								+ std::to_string(Scoreboard::Instance()->getHP() * 20)
+								+ std::to_string(ScoreBoard::Instance()->getHP() * 20)
 								+ "%");
 						if (m_pPlayer->getPlayerHP() <= 0)
 						{
@@ -149,23 +192,61 @@ void PlayScene::checkCollision()
 			}
 		}
 	}
+	for (auto shield : ItemManager::Instance()->getShieldPool())
+	{
+		if (shield->isActivated())
+		{
+			if (CollisionManager::squaredRadiusCheck(m_pPlayer, shield))
+			{
+				m_pPlayer->protect(true);
+				shield->activate(false);
+			}
+		}
+	}
+	for(auto powerUp : ItemManager::Instance()->getPowerUpPool())
+	{
+		if(powerUp->isActivated())
+		{
+			if(CollisionManager::squaredRadiusCheck(m_pPlayer,powerUp))
+			{
+				if(m_pPlayer->getPlayerPowLev() < 2)
+				{
+					m_pPlayer->setPlayerPowLev(1);
+				}
+				else
+				{
+					ScoreBoard::Instance()->setScore(200);
+				}
+				powerUp->activate(false);
+			}
+		}
+	}
 	
+}
+
+void PlayScene::displayExplosion(glm::vec2 pos)
+{
+	auto explosion = ExplosionManager::Instance()->getExplosion();
+	explosion->setPosition(pos);
+	explosion->activate();
 }
 
 void PlayScene::update()
 {
-	enemy1SpawningCooldown++;
+	enemySpawningCooldown++;
 	
 	m_pMap1->update();
 	m_pMap2->update();
 	m_pPlayer->update();
 	BulletManager::Instance()->update();
 	EnemyManager::Instance()->update();
+	ExplosionManager::Instance()->update();
+	ItemManager::Instance()->update();
 	
-	if(enemy1SpawningCooldown >= 300)
+	if(enemySpawningCooldown >= 150)
 	{
 		spawnEnemy();
-		enemy1SpawningCooldown = 0;
+		enemySpawningCooldown = 0;
 	}
 
 	checkCollision();
@@ -181,6 +262,8 @@ void PlayScene::clean()
 	delete m_pHpLabel;
 	delete m_pHighscoreLabel;
 	delete m_pPlayer;
+	TheSoundManager::Instance()->clear();
+	removeAllChildren();
 }
 
 void PlayScene::handleEvents()
@@ -251,14 +334,22 @@ void PlayScene::handleEvents()
 	}
 }
 
-void PlayScene::start()
+void PlayScene::initializePooling()
 {
 	EnemyManager::Instance()->buildEnemy1Pool();
 	EnemyManager::Instance()->buildEnemy2Pool();
 	BulletManager::Instance()->m_buildLaserPool();
 	BulletManager::Instance()->m_buildEnemyLaserPool();
-	Scoreboard::Instance()->resetValues();
-	enemy1SpawningCooldown = 0;
+	ExplosionManager::Instance()->m_buildExplosionPool();
+	ItemManager::Instance()->buildShieldPool();
+	ItemManager::Instance()->buildPowerUpPool();
+}
+
+void PlayScene::start()
+{
+	initializePooling();
+	ScoreBoard::Instance()->resetValues();
+	enemySpawningCooldown = 0;
 	m_pMap1 = new Map();
 	m_pMap1->setPosition(glm::vec2(-1280.0f,0.0f));
 	m_pMap1->setParent(this);
@@ -271,7 +362,7 @@ void PlayScene::start()
 	SDL_Color color = { 255, 200,200, 255 };
 
 	m_pHpLabel = new Label
-	("HP: " + std::to_string(Scoreboard::Instance()->getHP() * 20)
+	("HP: " + std::to_string(ScoreBoard::Instance()->getHP() * 20)
 		+ "%",
 		"QuirkyRobot", 60, color,
 		glm::vec2(Config::SCREEN_WIDTH * 0.90f, Config::SCREEN_HEIGHT * 0.05f));
@@ -279,7 +370,7 @@ void PlayScene::start()
 	addChild(m_pHpLabel);
 
 	m_pScoreLabel = new Label
-	("Score: " + std::to_string(Scoreboard::Instance()->getScore()),
+	("Score: " + std::to_string(ScoreBoard::Instance()->getScore()),
 		"QuirkyRobot",60,color,
 		glm::vec2(Config::SCREEN_WIDTH * 0.90f, Config::SCREEN_HEIGHT*0.15f));
 	m_pScoreLabel->setParent(this);
@@ -287,7 +378,7 @@ void PlayScene::start()
 
 
 	m_pHighscoreLabel = new Label
-	("Highscore: " + std::to_string(Scoreboard::Instance()->getHighScore()),
+	("Highscore: " + std::to_string(ScoreBoard::Instance()->getHighScore()),
 		"QuirkyRobot", 60, color,
 		glm::vec2(Config::SCREEN_WIDTH * 0.85f, Config::SCREEN_HEIGHT * 0.25f));
 	m_pScoreLabel->setParent(this);

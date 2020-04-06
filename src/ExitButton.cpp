@@ -17,8 +17,7 @@ ExitButton::ExitButton()
 }
 
 ExitButton::~ExitButton()
-{
-}
+= default;
 
 bool ExitButton::ButtonClick()
 {
@@ -26,7 +25,6 @@ bool ExitButton::ButtonClick()
 	{
 		if (!m_isClicked)
 		{
-			Game::Instance()->quit();
 			m_isClicked = true;
 		}
 		return true;

@@ -46,6 +46,12 @@ void SoundManager::playMusic(std::string id, int loop)
 	Mix_PlayMusic(m_music[id], loop);
 }
 
+void SoundManager::clear()
+{
+	m_sfxs.clear();
+	m_music.clear();
+}
+
 void SoundManager::playSound(std::string id, int loop)
 {
 	Mix_PlayChannel(-1, m_sfxs[id], loop);

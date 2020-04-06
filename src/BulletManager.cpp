@@ -2,7 +2,7 @@
 
 BulletManager* BulletManager::s_pInstance = nullptr;
 
-BulletManager::BulletManager() :m_LaserNumber(10),m_enemyLaserNumber(10)
+BulletManager::BulletManager() :m_LaserNumber(30),m_enemyLaserNumber(30)
 {
 	m_buildLaserPool();
 	m_buildEnemyLaserPool();
@@ -79,6 +79,7 @@ void BulletManager::draw()
 
 void BulletManager::m_buildLaserPool()
 {
+	m_pLaserPool.clear();
 	m_pLaserPool = std::list<Laser*>();
 
 	for (int i = 0; i < m_LaserNumber; i++)
@@ -89,6 +90,7 @@ void BulletManager::m_buildLaserPool()
 
 void BulletManager::m_buildEnemyLaserPool()
 {
+	m_pEnemyLaserPool.clear();
 	m_pEnemyLaserPool = std::list<Laser*>();
 
 	for (int i = 0; i < m_enemyLaserNumber; i++)

@@ -19,8 +19,7 @@ StartButton::StartButton()
 }
 
 StartButton::~StartButton()
-{
-}
+= default;
 
 bool StartButton::ButtonClick()
 {
@@ -28,7 +27,6 @@ bool StartButton::ButtonClick()
 	{
 		if(!m_isClicked)
 		{
-			Game::Instance()->changeSceneState(PLAY_SCENE);
 			m_isClicked = true;
 		}
 		return true;

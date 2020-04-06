@@ -6,11 +6,13 @@
 
 Player::Player(std::string imagePath, std::string name,
 	GameObjectType type, glm::vec2 position)
-	: m_name(name), m_alpha(255), m_maxSpeed(7.5f), m_fireRate(3.0f), m_coolTime(0.0f)
-,hp(5),m_invCoolTime(0.0f)
+	: m_name(name), m_alpha(255), m_ShieldAlpha(255), m_maxSpeed(7.5f), m_fireRate(3.0f), m_coolTime(0.0f)
+	, hp(5), m_invCoolTime(0.0f), m_protected(false), shieldCoolTime(0.0f), powerUpLev(0)
 {
 	TheTextureManager::Instance()->load(imagePath,
 		m_name, TheGame::Instance()->getRenderer());
+	TheTextureManager::Instance()->load("../Assets/textures/shield_aurora.png", "shield_aurora"
+	,TheGame::Instance()->getRenderer());
 
 	glm::vec2 size = TheTextureManager::Instance()->getTextureSize(m_name);
 	setWidth(size.x);
@@ -31,6 +33,11 @@ void Player::draw()
 	int yComponent = getPosition().y;
 	TheTextureManager::Instance()->draw(m_name, xComponent, yComponent,
 		TheGame::Instance()->getRenderer(), 0, m_alpha, true);
+	if(m_protected)
+	{
+		TheTextureManager::Instance()->draw("shield_aurora", xComponent, yComponent,
+			TheGame::Instance()->getRenderer(), 0, m_ShieldAlpha, true);
+	}
 }
 
 void Player::update()
@@ -52,6 +59,16 @@ void Player::update()
 	{
 		inv = false;
 		m_alpha = 255;
+	}
+	if(shieldCoolTime > 0)
+	{
+		shieldCoolTime -= 0.1f;
+		m_ShieldAlpha--;
+	}
+	if(shieldCoolTime <= 0)
+	{
+		m_protected = false;
+		m_ShieldAlpha = 255;
 	}
 }
 
@@ -83,10 +100,29 @@ void Player::fire()
 {
 	if(m_coolTime <= 0)
 	{
-		auto bullet = BulletManager::Instance()->getBullet();
-		bullet->setPosition
+		auto bullet1 = BulletManager::Instance()->getBullet();
+		bullet1->setPosition
 		(glm::vec2(getPosition().x + 10.0f, getPosition().y));
-		bullet->activate(true);
+		bullet1->activate(true);
+		if(powerUpLev >= 1)
+		{
+			auto bullet2 = BulletManager::Instance()->getBullet();
+			bullet2->setPosition
+			(glm::vec2(getPosition().x + 10.0f, getPosition().y));
+			bullet2->setVelocity(
+				glm::vec2(
+					bullet2->getVelocity().x, -45.0f * bullet2->getVelocity().x * glm::pi<float>() / 180));
+			bullet2->activate(true);
+		}
+		if(powerUpLev == 2)
+		{
+			auto bullet3 = BulletManager::Instance()->getBullet();
+			bullet3->setPosition
+			(glm::vec2(getPosition().x + 10.0f, getPosition().y));
+			bullet3->setVelocity(
+				glm::vec2(bullet3->getVelocity().x, 45.0f * bullet3->getVelocity().x * glm::pi<float>() / 180));
+			bullet3->activate(true);
+		}
 		SoundManager::Instance()->playSound("fire", 0);
 		m_coolTime = m_fireRate;
 	}
@@ -94,10 +130,23 @@ void Player::fire()
 
 void Player::hit()
 {
-	hp -= 1;
-	Scoreboard::Instance()->setHP(hp);
-	SoundManager::Instance()->playSound("hit",0);
-	beInvincible();
+	if(!m_protected)
+	{
+		hp -= 1;
+		ScoreBoard::Instance()->setHP(hp);
+		SoundManager::Instance()->playSound("hit", 0);
+		beInvincible();
+	}
+}
+
+int Player::getPlayerPowLev()
+{
+	return powerUpLev;
+}
+
+void Player::setPlayerPowLev(int num)
+{
+	powerUpLev += num;
 }
 
 int Player::getPlayerHP()
@@ -108,6 +157,21 @@ int Player::getPlayerHP()
 bool Player::getInvincible()
 {
 	return inv;
+}
+
+void Player::protect(bool newState)
+{
+	m_protected = newState;
+	if(m_protected)
+	{
+		m_ShieldAlpha = 255;
+		shieldCoolTime = 25.5f;
+	}
+}
+
+bool Player::isProtected()
+{
+	return m_protected;
 }
 
 void Player::checkBound()
@@ -144,7 +208,7 @@ void Player::movebyState()
 void Player::beInvincible()
 {
 	std::cout << "Invincible \n";
-	m_alpha = 122;
+	m_alpha *= 0.5;
 	inv = true;
 	m_invCoolTime = 15.0f;
 }

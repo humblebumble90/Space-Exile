@@ -79,6 +79,7 @@ void EnemyManager::draw()
 
 void EnemyManager::buildEnemy1Pool()
 {
+	m_pEnemy1Pool.clear();
 	m_pEnemy1Pool = std::list<Enemy1*>();
 
 	for (int i = 0; i < m_Enemy1Number; i++)
@@ -89,6 +90,7 @@ void EnemyManager::buildEnemy1Pool()
 
 void EnemyManager::buildEnemy2Pool()
 {
+	m_pEnemy2Pool.clear();
 	m_pEnemy2Pool = std::list<Enemy2*>();
 
 	for (int i = 0; i < m_Enemy2Number; i++)

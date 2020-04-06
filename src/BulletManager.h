@@ -1,3 +1,10 @@
+/*
+ * Author: 'Phillip' Hyungseok lee.
+ * Reference: Provided several templates from the professor Tom Tsiliopoulos's 2020 Winter COMP397 course.
+ * StudentNumber: 301011097
+ * Written date : 04-06-2020
+ * Description: Bullet manager built in object pooling way.
+ */
 #pragma once
 #ifndef __BULLET_MANAGER__
 #define __BULLET_MANAGER__

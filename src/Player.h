@@ -28,22 +28,32 @@ public:
 
     void move(Move newMove);
     void fire();
-    void hit();
+
 
     int getPlayerHP();
+    void hit();
+	
+    int getPlayerPowLev();
+    void setPlayerPowLev(int num);
 
     bool getInvincible();
+    void protect(bool newState);
+    bool isProtected();
 private:
     std::string m_name;
     Uint8 m_alpha;
+    Uint8 m_ShieldAlpha;
 	
     int hp;
+    int powerUpLev;
     bool inv;
+    bool m_protected;
     float m_maxSpeed;
 	
     float m_fireRate;
     float m_coolTime;
     float m_invCoolTime;
+    float shieldCoolTime;
 	
     void checkBound();
     void movebyState();

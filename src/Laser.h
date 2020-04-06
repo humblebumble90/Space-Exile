@@ -19,6 +19,7 @@ public:
 	~Laser();
 	
 	void draw() override;
+	void checkBound();
 	void update() override;
 	void clean() override;
 
@@ -26,12 +27,14 @@ public:
 	bool isActivated();
 
 	void switchToEnemyLaser();
+
+	float getMaxSpeed();
 private:
 	void move();
 	float m_maxSpeed;
 	std::string m_name;
 	Uint8 m_alpha;
-
+	int m_angle;
 	bool activated;
 };
 #endif /*Defined(__LASER__)*/

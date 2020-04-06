@@ -2,43 +2,45 @@
 #include <ostream>
 #include <iostream>
 
-Scoreboard* Scoreboard::instance = nullptr;
+ScoreBoard* ScoreBoard::instance = nullptr;
 
-Scoreboard::Scoreboard()
+ScoreBoard::ScoreBoard()
 {
-	resetValues();
+	hp = 5;
+	score = 0;
+	highScore = 0;
 }
 
-Scoreboard::~Scoreboard()
+ScoreBoard::~ScoreBoard()
 = default;
 
-void Scoreboard::resetValues()
+void ScoreBoard::resetValues()
 {
 	hp = 5;
 	score = 0;
 }
 
-int Scoreboard::getHP()
+int ScoreBoard::getHP()
 {
 	return hp;
 }
 
-void Scoreboard::setHP(int HP)
+void ScoreBoard::setHP(int HP)
 {
 	hp = HP;
 }
 
-int Scoreboard::getScore()
+int ScoreBoard::getScore()
 {
 	return score;
 }
 
-int Scoreboard::getHighScore()
+int ScoreBoard::getHighScore()
 {
 	return highScore;
 }
 
-void Scoreboard::setScore(int Score)
+void ScoreBoard::setScore(int Score)
 {
 	score += Score;
 	std::cout << "Current score: " + std::to_string(score) << std::endl;
@@ -48,7 +50,7 @@ void Scoreboard::setScore(int Score)
 	}
 }
 
-void Scoreboard::setHighScore(int num)
+void ScoreBoard::setHighScore(int num)
 {
 	std::cout << "Current HighScore: " + std::to_string(highScore) << std::endl;
 	highScore = num;

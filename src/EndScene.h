@@ -28,6 +28,7 @@ public:
 
 private:
 	Label* m_Label;
+	Label* m_scoreLabel;
 	Endscene_Bg* m_pBg;
 };
 
