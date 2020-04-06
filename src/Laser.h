@@ -1,3 +1,11 @@
+/*
+ * Author: 'Phillip' Hyungseok lee.
+ * Reference: Provided several templates from the professor Tom Tsiliopoulos's 2020 Winter COMP397 course.
+ * StudentNumber: 301011097
+ * Written date : 04-05-2020
+ * Description: Implement a laser's features. Enemy can also use laser
+ * after switch laser to enemy laser by implementing switchToEnemyLaser method.
+ */
 #pragma once
 #include "DisplayObject.h"
 #include "Config.h"

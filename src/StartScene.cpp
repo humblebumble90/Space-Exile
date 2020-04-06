@@ -24,6 +24,7 @@ void StartScene::draw()
 	m_pStartLabel->draw();
 	m_pStartButton->draw();
 	m_pExitButton->draw();
+	m_pInstruction_btn->draw();
 	
 }
 
@@ -33,12 +34,15 @@ void StartScene::update()
 	m_pStartButton->ButtonClick();
 	m_pExitButton->setMousePosition(m_mousePosition);
 	m_pExitButton->ButtonClick();
+	m_pInstruction_btn->setMousePosition(m_mousePosition);
+	m_pInstruction_btn->ButtonClick();
 }
 
 void StartScene::clean()
 {
+	delete m_pStart_Scene_Bg;
 	delete m_pStartLabel;
-	
+	delete m_pExitButton;
 	removeAllChildren();
 }
 
@@ -64,6 +68,7 @@ void StartScene::handleEvents()
 			case SDL_BUTTON_LEFT:
 				m_pStartButton->setMouseButtonClicked(true);
 				m_pExitButton->setMouseButtonClicked(true);
+				m_pInstruction_btn->setMouseButtonClicked(true);
 				break;
 			}
 
@@ -74,6 +79,7 @@ void StartScene::handleEvents()
 			case SDL_BUTTON_LEFT:
 				m_pStartButton->setMouseButtonClicked(false);
 				m_pExitButton->setMouseButtonClicked(false);
+				m_pInstruction_btn->setMouseButtonClicked(false);
 				break;
 			}
 			break;
@@ -121,10 +127,17 @@ void StartScene::start()
 	m_pStartButton->setPosition
 	(glm::vec2(Config::SCREEN_WIDTH * 0.25f, Config::SCREEN_HEIGHT * 0.9f));
 	addChild(m_pStartButton);
+	m_pInstruction_btn = new Instruction_btn();
+	m_pInstruction_btn->setParent(this);
+	addChild(m_pInstruction_btn);
 	m_pExitButton = new ExitButton();
 	m_pExitButton->setPosition
 	(glm::vec2(Config::SCREEN_WIDTH * 0.75f, Config::SCREEN_HEIGHT * 0.9f));
 	addChild(m_pExitButton);
+
+	SoundManager::Instance()->load("../Assets/audio/startScene_theme.ogg",
+		"startScene_theme", SOUND_MUSIC);
+	SoundManager::Instance()->playMusic("startScene_theme", 999);
 }
 
 glm::vec2 StartScene::getMousePosition()

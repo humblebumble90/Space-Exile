@@ -27,15 +27,15 @@ public:
 	
 	void update();
 	void draw();
+	void m_buildLaserPool();
+	void m_buildEnemyLaserPool();
 private:
 	BulletManager();
 	~BulletManager();
 
 	int m_LaserNumber;
 	int m_enemyLaserNumber;
-	
-	void m_buildLaserPool();
-	void m_buildEnemyLaserPool();
+
 	static BulletManager* s_pInstance;
 
 	std::list<Laser*> m_pLaserPool;

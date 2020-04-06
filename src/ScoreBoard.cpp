@@ -16,7 +16,6 @@ void Scoreboard::resetValues()
 {
 	hp = 5;
 	score = 0;
-	highScore = 0;
 }
 
 int Scoreboard::getHP()

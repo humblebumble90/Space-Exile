@@ -22,6 +22,9 @@ public:
 
 	Enemy1* getEnemy1();
 	Enemy2* getEnemy2();
+
+	void buildEnemy1Pool();
+	void buildEnemy2Pool();
 	
 	std::list<Enemy1*> getENemy1Pool();
 	std::list<Enemy2*> getEnemy2Pool();
@@ -35,8 +38,7 @@ private:
 	int m_Enemy1Number;
 	int m_Enemy2Number;
 	
-	void buildEnemy1Pool();
-	void buildEnemy2Pool();
+
 	static EnemyManager* s_pInstance;
 
 	std::list<Enemy1*> m_pEnemy1Pool;

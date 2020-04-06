@@ -1,3 +1,10 @@
+/*
+ * Author: 'Phillip' Hyungseok lee.
+ * Reference: Provided several templates from the professor Tom Tsiliopoulos's 2020 Winter COMP397 course.
+ * StudentNumber: 301011097
+ * Written date : 04-05-2020
+ * Description: The header file of the start-scene that main game is displayed.
+ */
 #pragma once
 #ifndef __START_SCENE__
 #define __START_SCENE__
@@ -7,6 +14,7 @@
 #include "StartButton.h"
 #include "Start_Scene_Bg.h"
 #include "ExitButton.h"
+#include "Instruction_btn.h"
 
 class StartScene : public Scene
 {
@@ -29,6 +37,7 @@ public:
 private:
 	// Game Objects
 	Label* m_pStartLabel;
+	Instruction_btn* m_pInstruction_btn;
 	StartButton* m_pStartButton;
 	ExitButton* m_pExitButton;
 	Start_Scene_Bg* m_pStart_Scene_Bg;

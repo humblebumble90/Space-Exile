@@ -1,3 +1,10 @@
+/*
+ * Author: 'Phillip' Hyungseok lee.
+ * Reference: Provided several templates from the professor Tom Tsiliopoulos's 2020 Winter COMP397 course.
+ * StudentNumber: 301011097
+ * Written date : 04-05-2020
+ * Description: Implement enemy2's feature. This enemy moves to player side and host laser.
+ */
 #pragma once
 #include "DisplayObject.h"
 #include <SDL_hints.h>

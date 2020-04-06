@@ -70,7 +70,7 @@ void PlayScene::checkCollision()
 					+ "%");
 				if(m_pPlayer->getPlayerHP() <= 0)
 				{
-					
+					Game::Instance()->changeSceneState(END_SCENE);
 				}
 			}
 			for(auto laser : BulletManager::Instance()->getBulletPool())
@@ -80,12 +80,13 @@ void PlayScene::checkCollision()
 				{
 					std::cout << "Enemy 1 is shot by laser!";
 					enemy1->activate(false);
+					SoundManager::Instance()->playSound("enemyHit", 0);
 					laser->activate(false);
 					Scoreboard::Instance()->setScore(100);
 					m_pScoreLabel->setText("Score : "
 						+ std::to_string(Scoreboard::Instance()->getScore()));
 					m_pHighscoreLabel
-						->setText("HIghscore" + Scoreboard::Instance()->getHighScore());
+						->setText("HIghscore: " + std::to_string(Scoreboard::Instance()->getHighScore()));
 				}
 			}
 		}
@@ -106,7 +107,7 @@ void PlayScene::checkCollision()
 						+ "%");
 				if (m_pPlayer->getPlayerHP() <= 0)
 				{
-
+					Game::Instance()->changeSceneState(END_SCENE);
 				}
 			}
 			for (auto laser : BulletManager::Instance()->getBulletPool())
@@ -116,12 +117,13 @@ void PlayScene::checkCollision()
 				{
 					std::cout << "Enemy 2 is shot by laser!";
 					enemy2 -> activate(false);
+					SoundManager::Instance()->playSound("enemyHit", 0);
 					laser->activate(false);
 					Scoreboard::Instance()->setScore(200);
 					m_pScoreLabel->setText("Score : "
 						+ std::to_string(Scoreboard::Instance()->getScore()));
 					m_pHighscoreLabel
-						->setText("HIghscore" + Scoreboard::Instance()->getHighScore());
+						->setText("HIghscore: " + std::to_string(Scoreboard::Instance()->getHighScore()));
 				}
 			}
 			for(auto enemyLaser : BulletManager::Instance()->getEnemyBulletPool())
@@ -140,7 +142,7 @@ void PlayScene::checkCollision()
 								+ "%");
 						if (m_pPlayer->getPlayerHP() <= 0)
 						{
-
+							Game::Instance()->changeSceneState(END_SCENE);
 						}
 					}
 				}
@@ -173,6 +175,12 @@ void PlayScene::update()
 
 void PlayScene::clean()
 {
+	delete m_pMap1;
+	delete m_pMap2;
+	delete m_pScoreLabel;
+	delete m_pHpLabel;
+	delete m_pHighscoreLabel;
+	delete m_pPlayer;
 }
 
 void PlayScene::handleEvents()
@@ -245,6 +253,11 @@ void PlayScene::handleEvents()
 
 void PlayScene::start()
 {
+	EnemyManager::Instance()->buildEnemy1Pool();
+	EnemyManager::Instance()->buildEnemy2Pool();
+	BulletManager::Instance()->m_buildLaserPool();
+	BulletManager::Instance()->m_buildEnemyLaserPool();
+	Scoreboard::Instance()->resetValues();
 	enemy1SpawningCooldown = 0;
 	m_pMap1 = new Map();
 	m_pMap1->setPosition(glm::vec2(-1280.0f,0.0f));
@@ -272,27 +285,27 @@ void PlayScene::start()
 	m_pScoreLabel->setParent(this);
 	addChild(m_pScoreLabel);
 
-	m_pScoreLabel = new Label
-	("Score: " + std::to_string(Scoreboard::Instance()->getScore()),
-		"QuirkyRobot", 60, color,
-		glm::vec2(Config::SCREEN_WIDTH * 0.90f, Config::SCREEN_HEIGHT * 0.15f));
-	m_pScoreLabel->setParent(this);
-	addChild(m_pScoreLabel);
 
 	m_pHighscoreLabel = new Label
 	("Highscore: " + std::to_string(Scoreboard::Instance()->getHighScore()),
 		"QuirkyRobot", 60, color,
-		glm::vec2(Config::SCREEN_WIDTH * 0.90f, Config::SCREEN_HEIGHT * 0.25f));
+		glm::vec2(Config::SCREEN_WIDTH * 0.85f, Config::SCREEN_HEIGHT * 0.25f));
 	m_pScoreLabel->setParent(this);
-	addChild(m_pScoreLabel);
+	addChild(m_pHighscoreLabel);
 	
 	m_pPlayer = new Player();
 	m_pPlayer->setParent(this);
 	addChild(m_pPlayer);
 
-	//m_pEnemy1 = new Enemy1();
-	//m_pEnemy1->setSpawningPosition(
-	//	glm::vec2(Config::SCREEN_WIDTH * 0.75f, Config::SCREEN_HEIGHT * 0.5f));
-	//m_pEnemy1->setParent(this);
-	//addChild(m_pEnemy1);
+	SoundManager::Instance()->load("../Assets/audio/playScene_theme.ogg",
+		"playScene_theme", SOUND_MUSIC);
+	SoundManager::Instance()->playMusic("playScene_theme", 999);
+	SoundManager::Instance()
+		->load("../Assets/audio/laser.wav", "fire", SOUND_SFX);
+	SoundManager::Instance()
+		->load("../Assets/audio/hit.wav", "hit", SOUND_SFX);
+	SoundManager::Instance()
+		->load("../Assets/audio/enemyLaser.wav", "enemyLaser", SOUND_SFX);
+	SoundManager::Instance()
+		->load("../Assets/audio/enemyHit.wav", "enemyHit", SOUND_SFX);
 }

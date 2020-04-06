@@ -17,6 +17,7 @@ Player::Player(std::string imagePath, std::string name,
 	setHeight(size.y);
 	setPosition(position);
 	setType(type);
+
 	std::cout << "Player instantiated!\n";
 }
 
@@ -86,6 +87,7 @@ void Player::fire()
 		bullet->setPosition
 		(glm::vec2(getPosition().x + 10.0f, getPosition().y));
 		bullet->activate(true);
+		SoundManager::Instance()->playSound("fire", 0);
 		m_coolTime = m_fireRate;
 	}
 }
@@ -94,6 +96,7 @@ void Player::hit()
 {
 	hp -= 1;
 	Scoreboard::Instance()->setHP(hp);
+	SoundManager::Instance()->playSound("hit",0);
 	beInvincible();
 }
 

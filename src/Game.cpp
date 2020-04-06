@@ -3,8 +3,10 @@
 #include "GLM/gtx/string_cast.hpp"
 #include <algorithm>
 #include <iomanip>
+#include "StartScene.h"
 #include "PlayScene.h"
-
+#include "EndScene.h"
+#include "InstructionScene.h"
 
 Game* Game::s_pInstance = 0;
 
@@ -146,6 +148,11 @@ void Game::changeSceneState(SceneState newState)
 		case SceneState::PLAY_SCENE:
 			m_currentScene = new PlayScene();
 				break;
+		case SceneState::END_SCENE:
+			m_currentScene = new EndScene();
+			break;
+		case SceneState::INSTRUCTION_SCENE:
+			m_currentScene = new InstructionScene();
 		default:
 			std::cout << "default case activated" << std::endl;
 			break;
@@ -193,8 +200,24 @@ void Game::clean()
 void Game::handleEvents()
 {
 	m_currentScene->handleEvents();
-
+	const Uint8* keystates = SDL_GetKeyboardState(NULL);
 	SDL_Event event;
+	if (keystates[SDL_SCANCODE_KP_1])
+	{
+		Game::Instance()->changeSceneState(START_SCENE);
+	}
+	if (keystates[SDL_SCANCODE_KP_2])
+	{
+		Game::Instance()->changeSceneState(PLAY_SCENE);
+	}
+	if (keystates[SDL_SCANCODE_KP_3])
+	{
+		Game::Instance()->changeSceneState(END_SCENE);
+	}
+	if(keystates[SDL_SCANCODE_KP_0])
+	{
+		Game::Instance()->changeSceneState(INSTRUCTION_SCENE);
+	}
 	while (SDL_PollEvent(&event))
 	{
 		switch (event.type)

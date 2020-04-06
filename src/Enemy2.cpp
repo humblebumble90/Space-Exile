@@ -73,6 +73,7 @@ void Enemy2::fire()
 		bullet->setPosition
 		(glm::vec2(getPosition().x - 10.0f, getPosition().y));
 		bullet->activate(true);
+		SoundManager::Instance()->playSound("enemyLaser", 0);
 		m_coolTime = m_fireRate;
 	}
 }

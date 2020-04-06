@@ -81,10 +81,6 @@ void Enemy1::move()
 	setPosition(glm::vec2(deltax, deltay));
 }
 
-void Enemy1::fire()
-{
-}
-
 void Enemy1::checkBound()
 {
 	if (getPosition().x <= Config::SCREEN_WIDTH * 0.03f - getWidth())

@@ -16,6 +16,7 @@ EndScene::~EndScene()
 
 void EndScene::draw()
 {
+	m_pBg->draw();
 	m_Label->draw();
 }
 
@@ -45,11 +46,8 @@ void EndScene::handleEvents()
 			case SDLK_ESCAPE:
 				TheGame::Instance()->quit();
 				break;
-			case SDLK_1:
+			case SDLK_r:
 				TheGame::Instance()->changeSceneState(SceneState::PLAY_SCENE);
-				break;
-			case SDLK_2:
-				TheGame::Instance()->changeSceneState(SceneState::START_SCENE);
 				break;
 			}
 			break;
@@ -61,8 +59,20 @@ void EndScene::handleEvents()
 
 void EndScene::start()
 {
-	SDL_Color blue = { 0, 0, 255, 255 };
-	m_Label = new Label("END SCENE", "Dock51", 80, blue, glm::vec2(400.0f, 40.0f));
+	m_pBg = new Endscene_Bg();
+	m_pBg->setPosition(glm::vec2(Config::SCREEN_WIDTH * 0.5f, 
+		Config::SCREEN_HEIGHT * 0.25f));
+	m_pBg->setParent(this);
+	addChild(m_pBg);
+	SDL_Color color = { 0,0, 0, 255 };
+	m_Label = new Label("Press R to restart the game.",
+		"QuirkyRobot", 80, color, 
+		glm::vec2(Config::SCREEN_WIDTH*0.5f, Config::SCREEN_HEIGHT*0.75f));
 	m_Label->setParent(this);
 	addChild(m_Label);
+
+
+	SoundManager::Instance()->load("../Assets/audio/endScene_theme.ogg",
+		"endScene_theme", SOUND_MUSIC);
+	SoundManager::Instance()->playMusic("endScene_theme", 999);
 }
