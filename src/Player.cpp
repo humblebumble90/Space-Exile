@@ -100,28 +100,28 @@ void Player::fire()
 {
 	if(m_coolTime <= 0)
 	{
-		auto bullet1 = BulletManager::Instance()->getBullet();
-		bullet1->setPosition
+		m_pLaser = BulletManager::Instance()->getBullet();
+		m_pLaser->setPosition
 		(glm::vec2(getPosition().x + 10.0f, getPosition().y));
-		bullet1->activate(true);
+		m_pLaser->activate(true);
 		if(powerUpLev >= 1)
 		{
-			auto bullet2 = BulletManager::Instance()->getBullet();
-			bullet2->setPosition
+			m_pLaser = BulletManager::Instance()->getBullet();
+			m_pLaser->setPosition
 			(glm::vec2(getPosition().x + 10.0f, getPosition().y));
-			bullet2->setVelocity(
+			m_pLaser->setVelocity(
 				glm::vec2(
-					bullet2->getVelocity().x, -45.0f * bullet2->getVelocity().x * glm::pi<float>() / 180));
-			bullet2->activate(true);
+					m_pLaser->getVelocity().x, -45.0f * m_pLaser->getVelocity().x * glm::pi<float>() / 180));
+			m_pLaser->activate(true);
 		}
 		if(powerUpLev == 2)
 		{
-			auto bullet3 = BulletManager::Instance()->getBullet();
-			bullet3->setPosition
+			m_pLaser = BulletManager::Instance()->getBullet();
+			m_pLaser->setPosition
 			(glm::vec2(getPosition().x + 10.0f, getPosition().y));
-			bullet3->setVelocity(
-				glm::vec2(bullet3->getVelocity().x, 45.0f * bullet3->getVelocity().x * glm::pi<float>() / 180));
-			bullet3->activate(true);
+			m_pLaser->setVelocity(
+				glm::vec2(m_pLaser->getVelocity().x, 45.0f * m_pLaser->getVelocity().x * glm::pi<float>() / 180));
+			m_pLaser->activate(true);
 		}
 		SoundManager::Instance()->playSound("fire", 0);
 		m_coolTime = m_fireRate;

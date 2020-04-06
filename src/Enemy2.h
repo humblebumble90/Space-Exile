@@ -8,6 +8,7 @@
 #pragma once
 #include "DisplayObject.h"
 #include <SDL_hints.h>
+#include "Laser.h"
 #ifndef __ENEMY2__
 #define __ENEMY2__
 class Enemy2 :public DisplayObject
@@ -29,6 +30,7 @@ private:
 	glm::vec2 startVelocity;
 	std::string m_name;
 	Uint8 m_alpha;
+	Laser* m_pLaser;
 	
 	float m_coolTime;
 	float m_fireRate;

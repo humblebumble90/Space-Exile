@@ -10,6 +10,7 @@
 #include <SDL_hints.h>
 #include "Config.h"
 #include "Move.h"
+#include "Laser.h"
 #ifndef __PLAYER__
 #define __PLAYER__
 class Player:public DisplayObject
@@ -49,6 +50,7 @@ private:
     bool inv;
     bool m_protected;
     float m_maxSpeed;
+    Laser* m_pLaser;
 	
     float m_fireRate;
     float m_coolTime;

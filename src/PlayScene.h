@@ -14,6 +14,10 @@
 #include "Enemy1.h"
 #include <list>
 #include "Label.h"
+#include "Enemy2.h"
+#include "Shield.h"
+#include "PowerUp.h"
+#include "Explosion.h"
 
 
 class PlayScene:public Scene
@@ -35,8 +39,17 @@ private:
 	Label* m_pScoreLabel;
 	Label* m_pHighscoreLabel;
 	Player* m_pPlayer;
+
+	Enemy1* m_pEnemy1;
+	Enemy2* m_pEnemy2;
+	Shield* m_pShield;
+	PowerUp* m_pPowerUp;
+	Explosion* m_pExplosion;
+
+	const Uint8* m_pKeyStates;
 	int enemySpawningCooldown;
 	int rndint;
+	int rndYPos;
 	
 	void spawnEnemy();
 	void checkCollision();

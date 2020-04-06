@@ -68,11 +68,11 @@ void Enemy2::fire()
 {
 	if (m_coolTime <= 0)
 	{
-		auto bullet = BulletManager::Instance()->getEnemyBullet();
-		bullet->switchToEnemyLaser();
-		bullet->setPosition
+		m_pLaser = BulletManager::Instance()->getEnemyBullet();
+		m_pLaser->switchToEnemyLaser();
+		m_pLaser->setPosition
 		(glm::vec2(getPosition().x - 10.0f, getPosition().y));
-		bullet->activate(true);
+		m_pLaser->activate(true);
 		SoundManager::Instance()->playSound("enemyLaser", 0);
 		m_coolTime = m_fireRate;
 	}

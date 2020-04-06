@@ -30,6 +30,7 @@ private:
 	glm::vec2 startPosition;
 	glm::vec2 startVelocity;
 	std::string m_name;
+	glm::vec2 size;
 	Uint8 m_alpha;
 	float m_verticalSwitchCooldown;
 	float m_time;

@@ -32,35 +32,35 @@ void PlayScene::draw()
 
 void PlayScene::spawnEnemy()
 {
-	auto enemy1_1 = EnemyManager::Instance()->getEnemy1();
-	int randNum_1 = rand() % 161 + 80;
-	enemy1_1->setSpawningPosition
-		(glm::vec2(Config::SCREEN_WIDTH*0.8f, randNum_1));
-	enemy1_1->activate(true);
+	m_pEnemy1 = EnemyManager::Instance()->getEnemy1();
+	rndYPos = rand() % 161 + 80;
+	m_pEnemy1->setSpawningPosition
+		(glm::vec2(Config::SCREEN_WIDTH*0.8f, rndYPos));
+	m_pEnemy1->activate(true);
 
-	auto enemy1_2 = EnemyManager::Instance()->getEnemy1();
-	int randNum_2 = rand() % 161 + 300;
-	enemy1_2->setSpawningPosition
-	(glm::vec2(Config::SCREEN_WIDTH * 0.8f, randNum_2));
-	enemy1_2->activate(true);
+	m_pEnemy1 = EnemyManager::Instance()->getEnemy1();
+	rndYPos = rand() % 161 + 300;
+	m_pEnemy1->setSpawningPosition
+	(glm::vec2(Config::SCREEN_WIDTH * 0.8f, rndYPos));
+	m_pEnemy1->activate(true);
 
-	auto enemy1_3 = EnemyManager::Instance()->getEnemy1();
-	int randNum_3 = rand() % 161 + 520;
-	enemy1_3->setSpawningPosition
-	(glm::vec2(Config::SCREEN_WIDTH * 0.8f, randNum_3));
-	enemy1_3->activate(true);
+	m_pEnemy1 = EnemyManager::Instance()->getEnemy1();
+	rndYPos = rand() % 161 + 520;
+	m_pEnemy1->setSpawningPosition
+	(glm::vec2(Config::SCREEN_WIDTH * 0.8f, rndYPos));
+	m_pEnemy1->activate(true);
 
-	auto enemy2_1 = EnemyManager::Instance()->getEnemy2();
-	int randNum_4 = rand() % 340 + 20;
-	enemy2_1->setPosition
-	(glm::vec2(Config::SCREEN_WIDTH * 0.8f, randNum_4));
-	enemy2_1->activate(true);
+	m_pEnemy2 = EnemyManager::Instance()->getEnemy2();
+	rndYPos = rand() % 340 + 20;
+	m_pEnemy2->setPosition
+	(glm::vec2(Config::SCREEN_WIDTH * 0.8f, rndYPos));
+	m_pEnemy2->activate(true);
 
-	auto enemy2_2 = EnemyManager::Instance()->getEnemy2();
-	int randNum_5 = rand() % 181 + 400;
-	enemy2_2->setPosition
-	(glm::vec2(Config::SCREEN_WIDTH * 0.8f, randNum_5));
-	enemy2_2->activate(true);
+	m_pEnemy2 = EnemyManager::Instance()->getEnemy2();
+	rndYPos = rand() % 181 + 400;
+	m_pEnemy2->setPosition
+	(glm::vec2(Config::SCREEN_WIDTH * 0.8f, rndYPos));
+	m_pEnemy2->activate(true);
 }
 
 void PlayScene::checkCollision()
@@ -101,9 +101,9 @@ void PlayScene::checkCollision()
 					rndint = rand() % 100;
 					if(rndint < 5)
 					{
-						auto shield = ItemManager::Instance()->getShield();
-						shield->setPosition(enemy1->getPosition());
-						shield->activate(true);
+						m_pShield = ItemManager::Instance()->getShield();
+						m_pShield->setPosition(enemy1->getPosition());
+						m_pShield->activate(true);
 					}
 					
 					ScoreBoard::Instance()->setScore(100);
@@ -151,15 +151,15 @@ void PlayScene::checkCollision()
 					rndint = rand() % 100;
 					if (rndint < 20)
 					{
-						auto shield = ItemManager::Instance()->getShield();
-						shield->setPosition(enemy2->getPosition());
-						shield->activate(true);
+						m_pShield = ItemManager::Instance()->getShield();
+						m_pShield->setPosition(enemy2->getPosition());
+						m_pShield->activate(true);
 					}
 					if (rndint > 19 && rndint < 25)
 					{
-						auto powerUp = ItemManager::Instance()->getPowerUp();
-						powerUp->setPosition(enemy2->getPosition());
-						powerUp->activate(true);
+						m_pPowerUp = ItemManager::Instance()->getPowerUp();
+						m_pPowerUp->setPosition(enemy2->getPosition());
+						m_pPowerUp->activate(true);
 					}
 					ScoreBoard::Instance()->setScore(200);
 					m_pScoreLabel->setText("Score : "
@@ -226,9 +226,9 @@ void PlayScene::checkCollision()
 
 void PlayScene::displayExplosion(glm::vec2 pos)
 {
-	auto explosion = ExplosionManager::Instance()->getExplosion();
-	explosion->setPosition(pos);
-	explosion->activate();
+	m_pExplosion = ExplosionManager::Instance()->getExplosion();
+	m_pExplosion->setPosition(pos);
+	m_pExplosion->activate();
 }
 
 void PlayScene::update()
@@ -262,35 +262,40 @@ void PlayScene::clean()
 	delete m_pHpLabel;
 	delete m_pHighscoreLabel;
 	delete m_pPlayer;
+	delete m_pEnemy1;
+	delete m_pEnemy2;
+	delete m_pShield;
+	delete m_pPowerUp;
+	delete m_pExplosion;
 	TheSoundManager::Instance()->clear();
 	removeAllChildren();
 }
 
 void PlayScene::handleEvents()
 {
-	const Uint8* keystates = SDL_GetKeyboardState(NULL);
+	m_pKeyStates = SDL_GetKeyboardState(NULL);
 	
-	if (keystates[SDL_SCANCODE_LEFT] || keystates[SDL_SCANCODE_A])
+	if (m_pKeyStates[SDL_SCANCODE_LEFT] || m_pKeyStates[SDL_SCANCODE_A])
 	{
 		m_pPlayer->move(LEFT);
 	}
-	if (keystates[SDL_SCANCODE_RIGHT] || keystates[SDL_SCANCODE_D])
+	if (m_pKeyStates[SDL_SCANCODE_RIGHT] || m_pKeyStates[SDL_SCANCODE_D])
 	{
 		m_pPlayer->move(RIGHT);
 	}
-	if (keystates[SDL_SCANCODE_UP] || keystates[SDL_SCANCODE_W])
+	if (m_pKeyStates[SDL_SCANCODE_UP] || m_pKeyStates[SDL_SCANCODE_W])
 	{
 		m_pPlayer->move(UP);
 	}
-	if (keystates[SDL_SCANCODE_DOWN] || keystates[SDL_SCANCODE_S])
+	if (m_pKeyStates[SDL_SCANCODE_DOWN] || m_pKeyStates[SDL_SCANCODE_S])
 	{
 		m_pPlayer->move(DOWN);
 	}
-	if(keystates[SDL_SCANCODE_ESCAPE])
+	if(m_pKeyStates[SDL_SCANCODE_ESCAPE])
 	{
 		Game::Instance()->quit();
 	}
-	if(keystates[SDL_SCANCODE_SPACE] ||
+	if(m_pKeyStates[SDL_SCANCODE_SPACE] ||
 		SDL_GetMouseState(NULL, NULL) & SDL_BUTTON(SDL_BUTTON_LEFT))
 	{
 		m_pPlayer->fire();

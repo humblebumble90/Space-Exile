@@ -5,11 +5,10 @@
 Enemy1::Enemy1():m_maxSpeed(2.5f),m_name("enemy1"),m_alpha(255),
 m_verticalSwitchCooldown(30.0f),m_time(-30.0f), m_activated(false)
 {
-		std::string imagePath = "../Assets/textures/enemy1.png";
-		TheTextureManager::Instance()->load(imagePath,
+		TheTextureManager::Instance()->load("../Assets/textures/enemy1.png",
 			m_name, TheGame::Instance()->getRenderer());
 
-		glm::vec2 size = TheTextureManager::Instance()->getTextureSize(m_name);
+		size = TheTextureManager::Instance()->getTextureSize(m_name);
 		setWidth(size.x);
 		setHeight(size.y);
 		setType(ENEMY);
