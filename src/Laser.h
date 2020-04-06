@@ -16,6 +16,8 @@ public:
 
 	void activate(bool newState);
 	bool isActivated();
+
+	void switchToEnemyLaser();
 private:
 	void move();
 	float m_maxSpeed;

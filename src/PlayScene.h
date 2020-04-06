@@ -13,6 +13,7 @@
 #include "Player.h"
 #include "Enemy1.h"
 #include <list>
+#include "Label.h"
 
 
 class PlayScene:public Scene
@@ -22,7 +23,6 @@ public:
 	~PlayScene();
 
 	void draw() override;
-	void spawnEnemy1();
 	void update() override;
 	void clean() override;
 	void handleEvents() override;
@@ -30,9 +30,14 @@ public:
 private:
 	Map* m_pMap1;
 	Map* m_pMap2;
+	Label* m_pHpLabel;
+	Label* m_pScoreLabel;
+	Label* m_pHighscoreLabel;
 	Player* m_pPlayer;
-
 	int enemy1SpawningCooldown;
+	
+	void spawnEnemy();
+	void checkCollision();
 
 };
 #endif /*Defined __PLAY_SCENE__*/

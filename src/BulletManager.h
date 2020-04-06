@@ -20,6 +20,11 @@ public:
 	void clean();
 
 	Laser* getBullet();
+	Laser* getEnemyBullet();
+	
+	std::list<Laser*> getBulletPool();
+	std::list<Laser*> getEnemyBulletPool();
+	
 	void update();
 	void draw();
 private:
@@ -27,8 +32,12 @@ private:
 	~BulletManager();
 
 	int m_LaserNumber;
+	int m_enemyLaserNumber;
+	
 	void m_buildLaserPool();
+	void m_buildEnemyLaserPool();
 	static BulletManager* s_pInstance;
 
 	std::list<Laser*> m_pLaserPool;
+	std::list<Laser*> m_pEnemyLaserPool;
 };

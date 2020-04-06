@@ -110,7 +110,7 @@ void StartScene::start()
 	m_pStart_Scene_Bg = new Start_Scene_Bg();
 	addChild(m_pStart_Scene_Bg);
 	
-	SDL_Color color = { 255, 180,180, 255 };
+	SDL_Color color = { 255, 200,200, 255 };
 	m_pStartLabel = new Label("Space Exile", "QuirkyRobot", 80, color, 
 		glm::vec2(Config::SCREEN_WIDTH * 0.5f, Config::SCREEN_HEIGHT * 0.25f)
 	,TTF_STYLE_BOLD,true);

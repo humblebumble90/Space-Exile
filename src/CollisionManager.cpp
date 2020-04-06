@@ -18,7 +18,37 @@ bool CollisionManager::squaredRadiusCheck(GameObject* object1, GameObject* objec
 	glm::vec2 P1 = object1->getPosition();
 	glm::vec2 P2 = object2->getPosition();
 	int halfHeights = (object1->getHeight() + object2->getHeight()) * 0.5f;
-	return false;
+
+	//if (glm::distance(P1, P2) < halfHeights) {
+
+	if (CollisionManager::squaredDistance(P1, P2) < (halfHeights * halfHeights)) {
+		if (!object2->getIsColliding()) {
+
+			object2->setIsColliding(true);
+
+			switch (object2->getType()) {
+			case TARGET:
+				std::cout << "Collision with Target!" << std::endl;
+				TheSoundManager::Instance()->playSound("yay", 0);
+				break;
+			case OBSTACLE:
+				std::cout << "Collision with Obstacle!" << std::endl;
+				TheSoundManager::Instance()->playSound("thunder", 0);
+				break;
+			default:
+				//std::cout << "Collision with unknown type!" << std::endl;
+				break;
+			}
+
+			return true;
+		}
+		return false;
+	}
+	else
+	{
+		object2->setIsColliding(false);
+		return false;
+	}
 }
 
 bool CollisionManager::AABBCheck(GameObject* object1, GameObject* object2)
@@ -43,6 +73,14 @@ bool CollisionManager::AABBCheck(GameObject* object1, GameObject* object2)
 			object2->setIsColliding(true);
 
 			switch (object2->getType()) {
+			case TARGET:
+				std::cout << "Collision with Target!" << std::endl;
+				TheSoundManager::Instance()->playSound("yay", 0);
+				break;
+			case OBSTACLE:
+				std::cout << "Collision with Obstacle!" << std::endl;
+				TheSoundManager::Instance()->playSound("thunder", 0);
+				break;
 			default:
 				//std::cout << "Collision with unknown type!" << std::endl;
 				break;
@@ -176,16 +214,21 @@ bool CollisionManager::circleAABBCheck(GameObject* object1, GameObject* object2)
 			glm::vec2 attackVector = object1->getPosition() - object2->getPosition();
 			glm::vec2  normal = glm::vec2(0.0f, -1.0f);
 
-
-			/*std::cout << "=====================================" << std::endl;
-			std::cout << "AttackX: " << attackVector.x << std::endl;
-			std::cout << "AttackY: " << attackVector.y << std::endl;*/
 			float dot = Util::dot(attackVector, normal);
-			/*std::cout << "dot: " << dot << std::endl;*/
 			float angle = acos(dot / Util::magnitude(attackVector)) * Util::Rad2Deg;
-			//std::cout << "Angle: " << angle << std::endl;
 
 			switch (object2->getType()) {
+			case TARGET:
+				std::cout << "Collision with Planet!" << std::endl;
+				TheSoundManager::Instance()->playSound("yay", 0);
+				break;
+			case OBSTACLE:
+				std::cout << "Collision with Mine!" << std::endl;
+				TheSoundManager::Instance()->playSound("thunder", 0);
+				break;
+			case SHIP:
+				//std::cout << "Collision with Ship!" << std::endl;
+				TheSoundManager::Instance()->playSound("thunder", 0);
 
 				if ((attackVector.x > 0 && attackVector.y < 0) || (attackVector.x < 0 && attackVector.y < 0))
 					// top right or top left

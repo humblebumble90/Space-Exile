@@ -13,7 +13,7 @@ Laser::Laser()
 	setWidth(size.x);
 	setHeight(size.y);
 	setType(PLAYER_LASER);
-	setVelocity(glm::vec2(1.0f * m_maxSpeed, getVelocity().y));
+	setVelocity(glm::vec2(1.0f * m_maxSpeed, 0.0f));
 	std::cout << "Laser instantiated!\n";
 }
 
@@ -51,6 +51,16 @@ void Laser::activate(bool newState)
 bool Laser::isActivated()
 {
 	return activated;
+}
+
+void Laser::switchToEnemyLaser()
+{
+	m_name = "enemyLaser";
+	std::string imagePath = "../Assets/textures/laser_enemy.png";
+	TheTextureManager::Instance()->load(imagePath,
+		m_name, TheGame::Instance()->getRenderer());
+	setType(ENEMY);
+	setVelocity(glm::vec2(-1.0f * m_maxSpeed, 0.0f));
 }
 
 void Laser::move()

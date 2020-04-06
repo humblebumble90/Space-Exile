@@ -2,7 +2,8 @@
 #include <SDL.h>
 #include "game.h"
 #include "BulletManager.h"
-#include "Enemy1Manager.h"
+#include "EnemyManager.h"
+#include "ScoreBoard.h"
 
 PlayScene::PlayScene()
 {
@@ -17,45 +18,157 @@ void PlayScene::draw()
 {
 	m_pMap1->draw();
 	m_pMap2->draw();
+	m_pScoreLabel->draw();
+	m_pHpLabel->draw();
+	m_pHighscoreLabel->draw();
 	m_pPlayer->draw();
 	BulletManager::Instance()->draw();
-	Enemy1Manager::Instance()->draw();
+	EnemyManager::Instance()->draw();
 }
 
-void PlayScene::spawnEnemy1()
+void PlayScene::spawnEnemy()
 {
-	auto enemy1_1 = Enemy1Manager::Instance()->getEnemy1();
-	int randNum_1 = rand() % 201 + 20;
+	auto enemy1_1 = EnemyManager::Instance()->getEnemy1();
+	int randNum_1 = rand() % 161 + 80;
 	enemy1_1->setSpawningPosition
-		(glm::vec2(Config::SCREEN_WIDTH*0.9f, randNum_1));
+		(glm::vec2(Config::SCREEN_WIDTH*0.8f, randNum_1));
 	enemy1_1->activate(true);
 
-	auto enemy1_2 = Enemy1Manager::Instance()->getEnemy1();
-	int randNum_2 = rand() % 221 + 200;
+	auto enemy1_2 = EnemyManager::Instance()->getEnemy1();
+	int randNum_2 = rand() % 161 + 300;
 	enemy1_2->setSpawningPosition
-	(glm::vec2(Config::SCREEN_WIDTH * 0.9f, randNum_2));
+	(glm::vec2(Config::SCREEN_WIDTH * 0.8f, randNum_2));
 	enemy1_2->activate(true);
 
-	auto enemy1_3 = Enemy1Manager::Instance()->getEnemy1();
-	int randNum_3 = rand() % 241 + 400;
+	auto enemy1_3 = EnemyManager::Instance()->getEnemy1();
+	int randNum_3 = rand() % 161 + 520;
 	enemy1_3->setSpawningPosition
-	(glm::vec2(Config::SCREEN_WIDTH * 0.9f, randNum_3));
+	(glm::vec2(Config::SCREEN_WIDTH * 0.8f, randNum_3));
 	enemy1_3->activate(true);
+
+	auto enemy2 = EnemyManager::Instance()->getEnemy2();
+	int randNum_4 = rand() % 560 + 20;
+	enemy2->setPosition
+	(glm::vec2(Config::SCREEN_WIDTH * 0.8f, randNum_4));
+	enemy2->activate(true);
+}
+
+void PlayScene::checkCollision()
+{
+	for(auto enemy1 : EnemyManager::Instance()->getENemy1Pool())
+	{
+		if(enemy1->isActivated())
+		{
+			if (CollisionManager::squaredRadiusCheck(m_pPlayer, enemy1) &&
+				!m_pPlayer->getInvincible())
+			{
+				std::cout << "Collision with enemy1\n";
+				m_pPlayer->hit();
+				m_pHpLabel
+					->setText("Hp: " 
+						+ std::to_string(Scoreboard::Instance()->getHP() * 20)
+					+ "%");
+				if(m_pPlayer->getPlayerHP() <= 0)
+				{
+					
+				}
+			}
+			for(auto laser : BulletManager::Instance()->getBulletPool())
+			{
+				if(CollisionManager::squaredRadiusCheck(laser,enemy1) &&
+					laser->isActivated())
+				{
+					std::cout << "Enemy 1 is shot by laser!";
+					enemy1->activate(false);
+					laser->activate(false);
+					Scoreboard::Instance()->setScore(100);
+					m_pScoreLabel->setText("Score : "
+						+ std::to_string(Scoreboard::Instance()->getScore()));
+					m_pHighscoreLabel
+						->setText("HIghscore" + Scoreboard::Instance()->getHighScore());
+				}
+			}
+		}
+	}
+
+	for(auto enemy2 : EnemyManager::Instance()->getEnemy2Pool())
+	{
+		if(enemy2->isActivated())
+		{
+			if(CollisionManager::squaredRadiusCheck(m_pPlayer,enemy2) &&
+				!m_pPlayer->getInvincible())
+			{
+				std::cout << "Collision with enemy2\n";
+				m_pPlayer->hit();
+				m_pHpLabel
+					->setText("Hp: "
+						+ std::to_string(Scoreboard::Instance()->getHP() * 20)
+						+ "%");
+				if (m_pPlayer->getPlayerHP() <= 0)
+				{
+
+				}
+			}
+			for (auto laser : BulletManager::Instance()->getBulletPool())
+			{
+				if (CollisionManager::squaredRadiusCheck(laser, enemy2) &&
+					laser->isActivated())
+				{
+					std::cout << "Enemy 2 is shot by laser!";
+					enemy2 -> activate(false);
+					laser->activate(false);
+					Scoreboard::Instance()->setScore(200);
+					m_pScoreLabel->setText("Score : "
+						+ std::to_string(Scoreboard::Instance()->getScore()));
+					m_pHighscoreLabel
+						->setText("HIghscore" + Scoreboard::Instance()->getHighScore());
+				}
+			}
+			for(auto enemyLaser : BulletManager::Instance()->getEnemyBulletPool())
+			{
+				if(enemyLaser->isActivated())
+				{
+					if(CollisionManager::squaredRadiusCheck(m_pPlayer,enemyLaser) &&
+						!m_pPlayer->getInvincible())
+					{
+						std::cout << "Player is shot by enemy laser!\n";
+						enemyLaser->activate(false);
+						m_pPlayer->hit();
+						m_pHpLabel
+							->setText("Hp: "
+								+ std::to_string(Scoreboard::Instance()->getHP() * 20)
+								+ "%");
+						if (m_pPlayer->getPlayerHP() <= 0)
+						{
+
+						}
+					}
+				}
+			}
+		}
+	}
+	
 }
 
 void PlayScene::update()
 {
 	enemy1SpawningCooldown++;
+	
 	m_pMap1->update();
 	m_pMap2->update();
 	m_pPlayer->update();
 	BulletManager::Instance()->update();
-	Enemy1Manager::Instance()->update();
-	if(enemy1SpawningCooldown > 300)
+	EnemyManager::Instance()->update();
+	
+	if(enemy1SpawningCooldown >= 300)
 	{
-		spawnEnemy1();
+		spawnEnemy();
 		enemy1SpawningCooldown = 0;
 	}
+
+	checkCollision();
+
+
 }
 
 void PlayScene::clean()
@@ -141,6 +254,38 @@ void PlayScene::start()
 	m_pMap2->setPosition(glm::vec2(0.0f, 0.0f));
 	m_pMap2->setParent(this);
 	addChild(m_pMap2);
+
+	SDL_Color color = { 255, 200,200, 255 };
+
+	m_pHpLabel = new Label
+	("HP: " + std::to_string(Scoreboard::Instance()->getHP() * 20)
+		+ "%",
+		"QuirkyRobot", 60, color,
+		glm::vec2(Config::SCREEN_WIDTH * 0.90f, Config::SCREEN_HEIGHT * 0.05f));
+	m_pHpLabel->setParent(this);
+	addChild(m_pHpLabel);
+
+	m_pScoreLabel = new Label
+	("Score: " + std::to_string(Scoreboard::Instance()->getScore()),
+		"QuirkyRobot",60,color,
+		glm::vec2(Config::SCREEN_WIDTH * 0.90f, Config::SCREEN_HEIGHT*0.15f));
+	m_pScoreLabel->setParent(this);
+	addChild(m_pScoreLabel);
+
+	m_pScoreLabel = new Label
+	("Score: " + std::to_string(Scoreboard::Instance()->getScore()),
+		"QuirkyRobot", 60, color,
+		glm::vec2(Config::SCREEN_WIDTH * 0.90f, Config::SCREEN_HEIGHT * 0.15f));
+	m_pScoreLabel->setParent(this);
+	addChild(m_pScoreLabel);
+
+	m_pHighscoreLabel = new Label
+	("Highscore: " + std::to_string(Scoreboard::Instance()->getHighScore()),
+		"QuirkyRobot", 60, color,
+		glm::vec2(Config::SCREEN_WIDTH * 0.90f, Config::SCREEN_HEIGHT * 0.25f));
+	m_pScoreLabel->setParent(this);
+	addChild(m_pScoreLabel);
+	
 	m_pPlayer = new Player();
 	m_pPlayer->setParent(this);
 	addChild(m_pPlayer);

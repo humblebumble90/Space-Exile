@@ -30,6 +30,8 @@ public:
     void fire();
     void hit();
 
+    int getPlayerHP();
+
     bool getInvincible();
 private:
     std::string m_name;
@@ -40,11 +42,12 @@ private:
     float m_maxSpeed;
 	
     float m_fireRate;
-    float m_cooltime;
+    float m_coolTime;
+    float m_invCoolTime;
 	
     void checkBound();
-
     void movebyState();
+    void beInvincible();
 	
 };
 #endif/*Defined (__PLAYER__)*/

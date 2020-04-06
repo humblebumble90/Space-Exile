@@ -2,10 +2,12 @@
 #include "TextureManager.h"
 #include "game.h"
 #include "BulletManager.h"
+#include "ScoreBoard.h"
 
 Player::Player(std::string imagePath, std::string name,
 	GameObjectType type, glm::vec2 position)
-	: m_name(name), m_alpha(255), m_maxSpeed(7.5f), m_fireRate(3.0f), m_cooltime(0.0f)
+	: m_name(name), m_alpha(255), m_maxSpeed(7.5f), m_fireRate(3.0f), m_coolTime(0.0f)
+,hp(5),m_invCoolTime(0.0f)
 {
 	TheTextureManager::Instance()->load(imagePath,
 		m_name, TheGame::Instance()->getRenderer());
@@ -37,11 +39,19 @@ void Player::update()
 	movebyState();
 
 
-	if (m_cooltime > 0)
+	if (m_coolTime > 0)
 	{
-		m_cooltime -= 0.1f;
+		m_coolTime -= 0.1f;
 	}
-	
+	if(m_invCoolTime > 0)
+	{
+		m_invCoolTime -= 0.1f;
+	}
+	if(m_invCoolTime <= 0)
+	{
+		inv = false;
+		m_alpha = 255;
+	}
 }
 
 void Player::clean()
@@ -70,18 +80,26 @@ void Player::move(Move newMove)
 
 void Player::fire()
 {
-	if(m_cooltime <= 0)
+	if(m_coolTime <= 0)
 	{
 		auto bullet = BulletManager::Instance()->getBullet();
 		bullet->setPosition
 		(glm::vec2(getPosition().x + 10.0f, getPosition().y));
 		bullet->activate(true);
-		m_cooltime = m_fireRate;
+		m_coolTime = m_fireRate;
 	}
 }
 
 void Player::hit()
 {
+	hp -= 1;
+	Scoreboard::Instance()->setHP(hp);
+	beInvincible();
+}
+
+int Player::getPlayerHP()
+{
+	return hp;
 }
 
 bool Player::getInvincible()
@@ -118,4 +136,12 @@ void Player::movebyState()
 	auto deltax = currentPosition.x + currentVelocity.x;
 	auto deltay = currentPosition.y + currentVelocity.y;
 	setPosition(glm::vec2(deltax, deltay));
+}
+
+void Player::beInvincible()
+{
+	std::cout << "Invincible \n";
+	m_alpha = 122;
+	inv = true;
+	m_invCoolTime = 30.0f;
 }

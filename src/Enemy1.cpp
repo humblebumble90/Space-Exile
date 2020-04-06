@@ -12,7 +12,7 @@ m_verticalSwitchCooldown(30.0f),m_time(-30.0f), m_activated(false)
 		glm::vec2 size = TheTextureManager::Instance()->getTextureSize(m_name);
 		setWidth(size.x);
 		setHeight(size.y);
-		setType(PLAYER_LASER);
+		setType(ENEMY);
 		setVelocity(glm::vec2(-1.0f * m_maxSpeed, -1.0f * m_maxSpeed));
 		std::cout << "Enemy1 instantiated!\n";
 }
@@ -30,6 +30,7 @@ void Enemy1::draw()
 
 void Enemy1::update()
 {
+	m_time++;
 	move();
 	checkBound();
 }
@@ -58,7 +59,6 @@ bool Enemy1::isActivated()
 
 void Enemy1::move()
 {
-	m_time++;
 	auto currentPosition = getPosition();
 	auto currentVelocity = getVelocity();
 
