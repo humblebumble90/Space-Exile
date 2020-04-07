@@ -54,12 +54,14 @@ void PlayScene::spawnEnemy()
 	rndYPos = rand() % 340 + 20;
 	m_pEnemy2->setPosition
 	(glm::vec2(Config::SCREEN_WIDTH * 0.8f, rndYPos));
+	m_pEnemy2->setTarget(m_pPlayer->getPosition());
 	m_pEnemy2->activate(true);
 
 	m_pEnemy2 = EnemyManager::Instance()->getEnemy2();
 	rndYPos = rand() % 181 + 400;
 	m_pEnemy2->setPosition
 	(glm::vec2(Config::SCREEN_WIDTH * 0.8f, rndYPos));
+		m_pEnemy2->setTarget(m_pPlayer->getPosition());
 	m_pEnemy2->activate(true);
 }
 
@@ -300,11 +302,31 @@ void PlayScene::handleEvents()
 	{
 		m_pPlayer->fire();
 	}
+	if(m_pKeyStates[SDL_SCANCODE_KP_PLUS])
+	{
+		m_pPlayer->setPlayerPowLev(1);
+	}
+	if(m_pKeyStates[SDL_SCANCODE_KP_MINUS])
+	{
+		m_pPlayer->setPlayerPowLev(-1);
+	}
 	SDL_Event event;
 	while (SDL_PollEvent(&event))
 	{
 		switch (event.type)
 		{
+		//case SDL_KEYDOWN:
+		//	switch(event.key.keysym.sym)
+		//	{
+		//	case SDLK_KP_PLUS:
+		//		m_pPlayer->setPlayerPowLev(1);
+		//		break;
+		//	case SDLK_KP_MINUS:
+		//		m_pPlayer->setPlayerPowLev(-1);
+		//		break;
+		//	default:
+		//		break;
+		//	}
 		case SDL_KEYUP:
 			switch (event.key.keysym.sym)
 			{

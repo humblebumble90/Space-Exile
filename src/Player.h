@@ -51,7 +51,7 @@ private:
     bool m_protected;
     float m_maxSpeed;
     Laser* m_pLaser;
-	
+    float m_speed;
     float m_fireRate;
     float m_coolTime;
     float m_invCoolTime;

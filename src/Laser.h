@@ -34,7 +34,7 @@ private:
 	float m_maxSpeed;
 	std::string m_name;
 	Uint8 m_alpha;
-	int m_angle;
 	bool activated;
+	float m_angle;
 };
 #endif /*Defined(__LASER__)*/

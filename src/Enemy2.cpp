@@ -54,6 +54,31 @@ bool Enemy2::isActivated()
 	return m_activated;
 }
 
+void Enemy2::setTarget(glm::vec2 target)
+{
+	m_target = target;
+	float tX = target.x;
+	float tY = target.y;
+	float baseSpeed = 10.0f;
+
+	float difX = glm::abs(getPosition().x - tX), difY = glm::abs(getPosition().y - tY);
+
+	bool xIsCloser = difX > difY;
+	switch (xIsCloser)
+	{
+	case true:
+		m_laserSpeed.x = baseSpeed;
+		m_laserSpeed.y = difY / difX * baseSpeed;
+		break;
+	case false:
+		m_laserSpeed.y = baseSpeed;
+		m_laserSpeed.x = difX / difY * baseSpeed;
+		break;
+	}
+	m_laserSpeed.x = getPosition().x > tX ? -m_laserSpeed.x : m_laserSpeed.x;
+	m_laserSpeed.y =  getPosition().y > tY ? -m_laserSpeed.y : m_laserSpeed.y;
+}
+
 void Enemy2::move()
 {
 	auto currentPosition = getPosition();
@@ -72,6 +97,7 @@ void Enemy2::fire()
 		m_pLaser->switchToEnemyLaser();
 		m_pLaser->setPosition
 		(glm::vec2(getPosition().x - 10.0f, getPosition().y));
+		m_pLaser->setVelocity(m_laserSpeed);
 		m_pLaser->activate(true);
 		SoundManager::Instance()->playSound("enemyLaser", 0);
 		m_coolTime = m_fireRate;

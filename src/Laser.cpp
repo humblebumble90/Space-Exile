@@ -15,6 +15,7 @@ Laser::Laser()
 	setType(PLAYER_LASER);
 	setVelocity(glm::vec2(1.0f * m_maxSpeed, 0.0f));
 	std::cout << "Laser instantiated!\n";
+
 }
 
 Laser::~Laser()
@@ -23,21 +24,13 @@ Laser::~Laser()
 
 void Laser::draw()
 {
-	if(getType() == PLAYER_LASER)
-	{
 		int xComponent = getPosition().x;
 		int yComponent = getPosition().y;
-		m_angle = getVelocity().y / getVelocity().x * 90/glm::pi<float>();
+	//	m_angle = 180.0f/  glm::pi<float>()
+	//* getVelocity().y / (getVelocity().x + glm::abs(getVelocity().y));
+		m_angle = glm::degrees(std::atan2(getVelocity().y, getVelocity().x));
 		TheTextureManager::Instance()->draw(m_name, xComponent, yComponent,
 			TheGame::Instance()->getRenderer(), m_angle, m_alpha, true);
-	}
-	else
-	{
-		int xComponent = getPosition().x;
-		int yComponent = getPosition().y;
-		TheTextureManager::Instance()->draw(m_name, xComponent, yComponent,
-			TheGame::Instance()->getRenderer(), 0, m_alpha, true);
-	}
 }
 
 void Laser::checkBound()
@@ -77,7 +70,6 @@ void Laser::switchToEnemyLaser()
 	TheTextureManager::Instance()->load(imagePath,
 		m_name, TheGame::Instance()->getRenderer());
 	setType(ENEMY);
-	setVelocity(glm::vec2(-1.0f * m_maxSpeed, 0.0f));
 }
 
 float Laser::getMaxSpeed()

@@ -24,17 +24,20 @@ public:
 
 	void activate(bool newState);
 	bool isActivated();
+	void setTarget(glm::vec2 target);
 private:
 	float m_maxSpeed;
 	glm::vec2 startPosition;
 	glm::vec2 startVelocity;
 	std::string m_name;
 	Uint8 m_alpha;
-	Laser* m_pLaser;
 	
+	Laser* m_pLaser;
 	float m_coolTime;
 	float m_fireRate;
 	bool m_activated;
+	glm::vec2 m_target;
+	glm::vec2 m_laserSpeed;
 
 	void move();
 	void fire();

@@ -101,8 +101,13 @@ void Player::fire()
 	if(m_coolTime <= 0)
 	{
 		m_pLaser = BulletManager::Instance()->getBullet();
+		m_speed = 10.0f;
 		m_pLaser->setPosition
 		(glm::vec2(getPosition().x + 10.0f, getPosition().y));
+		//float angle = 90.0f;
+		//float speedX = 1.0f * m_pLaser->getMaxSpeed() * (1 - glm::abs(angle / 90.0f));
+		//float speedY = -1.0f * m_pLaser->getMaxSpeed() * angle / 90.0f;
+		//m_pLaser->setVelocity(glm::vec2(speedX,speedY));
 		m_pLaser->activate(true);
 		if(powerUpLev >= 1)
 		{
@@ -110,8 +115,7 @@ void Player::fire()
 			m_pLaser->setPosition
 			(glm::vec2(getPosition().x + 10.0f, getPosition().y));
 			m_pLaser->setVelocity(
-				glm::vec2(
-					m_pLaser->getVelocity().x, -45.0f * m_pLaser->getVelocity().x * glm::pi<float>() / 180));
+				glm::vec2( m_speed, 0.5f *  -m_speed));
 			m_pLaser->activate(true);
 		}
 		if(powerUpLev == 2)
@@ -120,7 +124,7 @@ void Player::fire()
 			m_pLaser->setPosition
 			(glm::vec2(getPosition().x + 10.0f, getPosition().y));
 			m_pLaser->setVelocity(
-				glm::vec2(m_pLaser->getVelocity().x, 45.0f * m_pLaser->getVelocity().x * glm::pi<float>() / 180));
+				glm::vec2(m_speed, 0.5f *  m_speed));
 			m_pLaser->activate(true);
 		}
 		SoundManager::Instance()->playSound("fire", 0);
@@ -146,7 +150,10 @@ int Player::getPlayerPowLev()
 
 void Player::setPlayerPowLev(int num)
 {
-	powerUpLev += num;
+	if( powerUpLev > -1 && powerUpLev < 2)
+	{
+		powerUpLev += num;
+	}
 }
 
 int Player::getPlayerHP()
